@@ -143,5 +143,54 @@
 
      Get-ScheduledTask | Select-Object TaskName, TaskPath, Date, Author, Actions, Triggers, Description, State | where Author -NotLike 'Microsoft*' | where Author -ne $null | where Author -NotLike '*@%SystemRoot%\*'
      
-      Export-ScheduledTask -TaskName updater1
+     Export-ScheduledTask -TaskName updater1
     
+# File Hashing
+
+     Get-FileHash .\notes.txt -Algorithm MD5
+        
+# File Analysis, and Alternate Data Streams
+
+     Get-Item .\note.txt -Stream *
+        
+     Get-Item .\note.txt -Stream * | where Stream -ne ':$DATA'
+         
+     Get-Content .\notes.txt -Stream SoupDuJour
+          
+# Raw File Analysis
+
+      Get-Content .\ps.txt –Encoding Byte | Format-Hex
+      
+      $magicBytes = '{0:X2}' -f (Get-Content .\ps.txt -Encoding Byte -ReadCount 4)
+
+# Regular Expressions
+
+      Get-Content .\file.bin | Select-String '[A-Za-z0-9\/\+]{1024,}[=]{0,2}'
+  
+      $filecontent = Get-Content .\file.bin   
+      $filecontent -cmatch '[A-Za-z0-9\+\/]{1024,}[=]{0,2}'
+      
+# Encoded Data - Base64
+
+      $encoded = "R2V0LUZpbGVIYXNoIC5cbm90ZXMudHh0IC1BbGdvcml0aG0gTUQ1"
+      [System.Text.Encoding]::ascii.GetString([System.Convert]::FromBase64String($encoded))
+      ([System.Convert]::FromBase64String($encoded)) | Format-Hex
+
+<# --------------------------------------Conclusion---------------------------------- #>
+
+<# Data collection is at the heart of every digital investigation to include an incident
+    response. Both hunting and gathering can serve as extremely useful techniques that
+    ultimately aid the incident responder. Although efforts should be made to automate and
+    centralize this effort, some system artifacts will remain on a given host. Handlers can use
+    these datasets to build baselines or normalize environmental variables. Additionally, the
+    output of a threat hunting engagement can be used to create rules or become building
+    blocks for signature development.
+    Performing targeted collections with tools like PowerShell, responders can collect
+    granular objects that relate to a given event or series of events. The latest in
+    PowerShell’s framework is shown to have a treasure trove of capabilities for incident
+    response team members. Incident handlers and threat hunters alike can leverage this
+    resource to further enrich the information needed to solve complex or compounded
+    problems within their computer networks. Finally, tried and tested techniques can be
+    encapsulated into scripts that teams can use for repetitive data collection and analysis.
+
+#>
