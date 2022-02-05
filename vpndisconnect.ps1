@@ -1,3 +1,4 @@
+# Disable the network connection if the VPN is disconnected
 $state = $true  
 While ($state) {
     $vpnName = "VPS";
