@@ -1,13 +1,12 @@
-$Groups = Get-Content "E:\powershell\Group.txt"  
-  
-foreach ($Group in $Groups) {  
-	write-output {
+$Groups = Get-ADGroup -Filter * -Properties cn
+ 
 
-}
-$Group
-  	write-output {
-
-}
-        Get-ADGroupMember -identity $Group |select name    
-          
+foreach ($Group in $Groups) { 
+         
+        $Groupname = $Group.cn
+        Write-host "Members of $Groupname :" 
+        write-host
+        Get-ADGroupMember -identity $Group.cn | select name  
+        write-host  
+        write-host "---------------------------------------"  
 } 
