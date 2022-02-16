@@ -1,14 +1,24 @@
-$ServerName = Get-Content "e:\powershell\servers.txt"
-$users = Get-Content "E:\powershell\users.txt"
-  
+$Servers = Get-ADComputer -Filter * 
 
-foreach ($Server in $ServerName) {  
-  	$Computer = [ADSI]("WinNT://$Server,computer")
-	$Group = $Computer.PSBase.Children.Find("Administrators")
-	ForEach ($User in $users)
-		{   $Group.Remove("WinNT://$User")
-		}     
-          
+$users = @(
+    'guest'
+    'administrator'
+    )
+
+$Groups = @(
+    'administrators'
+    'Remote Desktop Users'
+    )  
+
+foreach ($Server in $Servers) {  
+  	$Computer = [ADSI]("WinNT://$Server.name,computer")
+	foreach ($Group in $Groups) {
+
+        $LocalGroup = $Computer.PSBase.Children.Find($Group)
+	    ForEach ($User in $users)
+		    {   $LocalGroup.Remove("WinNT://$User")
+		    }     
+     }     
 } 
 
 
